@@ -81,7 +81,7 @@ def update(num):
     plt.axis('off')
     return plt
 
-writer=animation.FFMpegWriter(bitrate=15000)
+#writer=animation.FFMpegWriter(bitrate=15000)
 anim = animation.FuncAnimation(fig, update, interval=200, frames=50)
 #anim.save('game-of-life.mp4',  writer=writer)
 plt.show()
