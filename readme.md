@@ -6,7 +6,7 @@ Forest Fire
 
 [Forest fire model](https://en.wikipedia.org/wiki/Forest-fire_model) python implementation.
 
-![previes](forest-fire.git)
+![previes](forest-fire.gif)
 
 Game of life
 ------------
