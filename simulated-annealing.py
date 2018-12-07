@@ -6,11 +6,10 @@ import math
 def evaluate(cities):
     distance = 0
     for index in range(len(cities)):
+        a = cities[index]
         if index == len(cities)-1:
-            a = cities[index]
             b = cities[0]
         else:
-            a = cities[index]
             b = cities[index + 1]
 
         distance += np.linalg.norm(a - b)
