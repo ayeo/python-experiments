@@ -1,12 +1,19 @@
 Python experiments
 ==================
 
+Traveling Salesman Problem
+--------------------------
+
+Dead simple solution using [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing) algoritm
+
+![preview](simulated-annealing.png)
+
 Forest Fire
 -----------
 
 [Forest fire model](https://en.wikipedia.org/wiki/Forest-fire_model) python implementation.
 
-![previes](forest-fire.gif)
+![preview](forest-fire.gif)
 
 Game of life
 ------------
