@@ -61,7 +61,7 @@ def process(cities_number, temperature = 800, cooling_factor = .001):
 
     return cities
 
-cities = process(50, temperature = 50000)
+cities = process(50, temperature = 2000)
 plt.plot(cities[:, 0], cities[:, 1], color='red', zorder=0)
 plt.scatter(cities[:, 0], cities[:, 1], marker='o')
 plt.axis('off')
