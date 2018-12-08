@@ -40,45 +40,23 @@ def accept_solution(energy1, energy2, temperature):
             return False
 
 
-def update(i):
-    global cities, current, temperature
+def process(cities_number, temperature = 800, cooling_factor = .001):
+    cities = (np.random.rand(cities_number, 2) * 100).astype(int)
+    current = evaluate(cities)
 
-    changed = False
-    new_solution = swap(cities)
-    energy = evaluate(new_solution)
-    if accept_solution(current, energy, temperature):
-        cities = new_solution
-        current = energy
-        changed = True
+    while temperature > 0.001:
+        new_solution = swap(cities)
+        energy = evaluate(new_solution)
+        if accept_solution(current, energy, temperature):
+            cities = new_solution
+            current = energy
 
-    temperature *= 1 - cooling_factor
+        temperature *= 1 - cooling_factor
 
-    if temperature < 0.01:
-        return plt
+    return cities
 
-    if changed is False:
-        return update(i)
-
-    plt.cla()
-    plt.axis('off')
-    plt.text(0, 0, round(temperature, 2))
-    plt.plot(cities[:, 0], cities[:, 1], color='red', zorder=0)
-    plt.scatter(cities[:, 0], cities[:, 1], marker='o')
-
-    return plt
-
-
-cities_number = 12
-temperature = 200
-cooling_factor = .01
-cities = (np.random.rand(cities_number, 2) * 100).astype(int)
-current = evaluate(cities)
-
-from matplotlib import animation, rc
-rc('animation', html='html5')
-fig, ax = plt.subplots()
-fig.set_tight_layout(True)
-writer=animation.FFMpegWriter(bitrate=15000)
-anim = animation.FuncAnimation(fig, update, interval=1, frames=500)
-anim.save('annealing.mp4',  writer=writer)
-
+cities = process(50, temperature = 3000)
+plt.plot(cities[:, 0], cities[:, 1], color='red', zorder=0)
+plt.scatter(cities[:, 0], cities[:, 1], marker='o')
+plt.axis('off')
+plt.show()
