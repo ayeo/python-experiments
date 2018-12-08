@@ -29,6 +29,7 @@ def swap(x):
     y[i], y[j] = x[j], x[i]
 
     if (i > j):
+        # reverse order of intermediating cities
         y[j: i] = y[j: i][::-1]
 
     return y
