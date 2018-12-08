@@ -19,18 +19,11 @@ def evaluate(cities):
 
 
 def swap(x):
-    i = random.randint(0, len(x) - 1)
-    j = random.randint(0, len(x) - 1)
-
-    if (i == j):
-        return swap(x)
+    i = random.randint(0, len(x) - 2)
+    j = random.randint(i, len(x) - 1)
 
     y = np.copy(x)
-    y[i], y[j] = x[j], x[i]
-
-    if (i > j):
-        # reverse order of intermediating cities
-        y[j: i] = y[j: i][::-1]
+    y[i: j] = y[i: j][::-1]
 
     return y
 
@@ -62,7 +55,7 @@ def process(cities_number, temperature = 800, cooling_factor = .001):
 
     return cities
 
-cities = process(50, temperature = 2000)
+cities = process(50, temperature = 3000)
 plt.plot(cities[:, 0], cities[:, 1], color='red', zorder=0)
 plt.scatter(cities[:, 0], cities[:, 1], marker='o')
 plt.axis('off')
