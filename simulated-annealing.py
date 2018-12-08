@@ -19,13 +19,13 @@ def evaluate(cities):
 
 
 def swap(x):
-    y = np.copy(x)
     i = random.randint(0, len(x) - 1)
     j = random.randint(0, len(x) - 1)
 
     if (i == j):
         return swap(x)
 
+    y = np.copy(x)
     y[i], y[j] = x[j], x[i]
 
     if (i > j):
