@@ -6,7 +6,7 @@ Traveling Salesman Problem
 
 Dead simple solution using [simulated annealing](https://en.wikipedia.org/wiki/Simulated_annealing) algoritm
 
-![preview](simulated-annealing.png)
+![preview](simulated-annealing.gif)
 
 Forest Fire
 -----------
