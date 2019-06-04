@@ -8,6 +8,10 @@ Dead simple solution using [simulated annealing](https://en.wikipedia.org/wiki/S
 
 ![preview](annealing.gif)
 
+Another approach with genetic algoritm. The solution provides quite good result quality while it is simple and quick (depsite using simplified crossing over algorithm)
+
+![preview](genetic.gif)
+
 Forest Fire
 -----------
 

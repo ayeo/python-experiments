@@ -4,6 +4,12 @@ import random
 import matplotlib.pyplot as plt
 import numpy as np
 
+elite = 5
+matingPoolSize = 50
+genome_length = 20
+stability_factor = 100
+breeding_intensity = 50
+
 
 def init_random_population():
     integers = np.arange(0, genome_length).astype(int)
@@ -28,7 +34,7 @@ def evaluate(route):
     return distance
 
 
-def crossover():
+def crossover(population):
     a = random.randint(0, matingPoolSize - 1)
     b = a
     while (a == b):
@@ -42,22 +48,19 @@ def crossover():
     secondPart = np.array([n for n in population[b] if n not in firstPart])
     x2 = np.append(firstPart, secondPart)
 
-    result = np.vstack(
-        [
-            mutate(x1),
-            mutate(mutate(x1)),
+    return np.vstack([mutate(x1), mutate(x2)])
 
-            mutate(x2),
-            mutate(mutate(x2)),
-        ]
-    )
-    return result
+
+def randomPair(max):
+    a = b = random.randint(0, max)
+    while (a == b):
+        b = random.randint(0, max)
+
+    return (a, b)
+
 
 def mutate(genome):
-    a = b = random.randint(0, genome_length - 1) #extract this to method
-    while (a == b):
-        b = random.randint(0, genome_length - 1)
-
+    (a, b) = randomPair(genome_length - 1)
     tmp = genome[a]
     genome[a] = genome[b]
     genome[b] = tmp
@@ -82,8 +85,8 @@ def evolve(population):
             break
 
         new_population = population[:elite]
-        for x in range(crossing_over_quantity):
-            new_population = np.vstack([new_population, crossover()])
+        for x in range(breeding_intensity):
+            new_population = np.vstack([new_population, crossover(population)])
         new_population = np.array(sorted(new_population, key=lambda x: evaluate(x)))
         population = new_population[:matingPoolSize]
 
@@ -91,17 +94,13 @@ def evolve(population):
     return population
 
 
-matingPoolSize = 50
-genome_length = 15
-stability_factor = 100
-elite = 5
-crossing_over_quantity = 50
+# solution
 cities = (np.random.rand(genome_length, 2) * 100).astype(int)
 population = init_random_population()
 population = evolve(population)
 
 
-# print result
+# printing result (mapping and plot)
 solution = np.empty((genome_length+1, 2)).astype(int)
 x = 0
 for i in population[0]:
