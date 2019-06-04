@@ -15,14 +15,14 @@ def init_random_population():
     return np.array(population)
 
 
-def evaluate(points):
+def evaluate(route):
     distance = 0
-    a = cities[0]  # always start form first city
-    for index in range(0, len(points)):
-        b = cities[points[index]]
+    a = cities[route[0]]
+    for index in range(1, len(route)):
+        b = cities[route[index]]
         distance += np.linalg.norm(a - b)
         a = b
-    distance += np.linalg.norm(b - cities[0])  # go back to starting point
+    distance += np.linalg.norm(b - cities[route[0]])  # go back to starting point
 
     return distance
 
@@ -58,10 +58,7 @@ def evolve(population):
         population = np.vstack([population, [
             crossover(),
             crossover(),
-            crossover(),
             mutate(),
-            mutate(),
-            mutate()
         ]])
         population = np.array(sorted(population, key=lambda x: evaluate(x)))
         population = population[:population_size]
@@ -71,15 +68,21 @@ def evolve(population):
 
 
 population_size = 10
-genome_length = 5
-generations = 50
+genome_length = 8
+generations = 25
 cities = (np.random.rand(genome_length, 2) * 100).astype(int)
 population = init_random_population()
 population = evolve(population)
 
-solution = np.empty((genome_length, 2)).astype(int)
+
+
+# print result
+solution = np.empty((genome_length+1, 2)).astype(int)
+x = 0
 for i in population[0]:
-    solution[i] = cities[i]
+    solution[x] = cities[i]
+    x += 1
+solution[genome_length] = cities[population[0][0]]
 
 
 plt.plot(solution[:, 0], solution[:, 1], color='red', zorder=0)
