@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 cities_number = 20
-elite_size = 5
+elite_size = 10
 mating_pool_size = 50
 breeding_intensity = 50
 stability_factor = 100
@@ -75,7 +75,7 @@ def evolve(population: list) -> list:
         else:
             last = current
             counter = 0
-        new_population = population[:elite_size]
+        new_population = population[slice(elite_size)]
         for x in range(breeding_intensity):
             new_population = new_population + crossover(population)
         new_population = sorted(new_population, key=lambda x: total_route_distance(x))
