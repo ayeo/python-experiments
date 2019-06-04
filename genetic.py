@@ -1,5 +1,7 @@
 import random
 import numpy as np
+import math
+import matplotlib.pyplot as plt
 
 
 def init_random_population():
@@ -10,7 +12,7 @@ def init_random_population():
         random.shuffle(genome)
         population[i] = genome
 
-    return population
+    return np.array(population)
 
 
 def evaluate(points):
@@ -25,20 +27,64 @@ def evaluate(points):
     return distance
 
 
+def crossover():
+    a = random.randint(0, population_size - 1)
+    b = a
+    while (a == b):
+        b = random.randint(0, population_size - 1)
+    aGenomeLength = math.floor(genome_length/2)
+    firstPart = population[a][:aGenomeLength]
+    secondPart = np.array([n for n in population[b] if n not in firstPart])
+
+    return np.append(firstPart, secondPart)
+
+def mutate():
+    i = random.randint(0, population_size - 1)
+    a = random.randint(0, genome_length - 1) #extract this to method
+    b = a
+    while (a == b):
+        b = random.randint(0, genome_length - 1)
+    genome = population[i]
+
+    tmp = genome[a]
+    genome[a] = genome[b]
+    genome[b] = tmp
+
+    return genome
+
+def evolve(population):
+    for i in range(generations):
+        print(evaluate(population[0]))
+        population = np.vstack([population, [
+            crossover(),
+            crossover(),
+            crossover(),
+            mutate(),
+            mutate(),
+            mutate()
+        ]])
+        population = np.array(sorted(population, key=lambda x: evaluate(x)))
+        population = population[:population_size]
+
+
+    return population
+
+
 population_size = 10
-genome_length = 10
-cities = (np.random.rand(population_size, 2) * 100).astype(int)
-solutions = init_random_population()
+genome_length = 5
+generations = 50
+cities = (np.random.rand(genome_length, 2) * 100).astype(int)
+population = init_random_population()
+population = evolve(population)
 
-solutions = sorted(solutions, key=lambda x: evaluate(x))
+solution = np.empty((genome_length, 2)).astype(int)
+for i in population[0]:
+    solution[i] = cities[i]
 
-#  make sure it is sorted
-print(evaluate(solutions[0]))
-print(evaluate(solutions[1]))
-print(evaluate(solutions[2]))
-print(evaluate(solutions[3]))
-print(evaluate(solutions[4]))
-print(evaluate(solutions[5]))
-print(evaluate(solutions[6]))
-print(evaluate(solutions[7]))
-print(evaluate(solutions[8]))
+
+plt.plot(solution[:, 0], solution[:, 1], color='red', zorder=0)
+plt.scatter(cities[:, 0], cities[:, 1], marker='o')
+plt.axis('off')
+plt.show()
+
+exit(0)
