@@ -52,6 +52,7 @@ def mutate():
 
     return genome
 
+
 def evolve(population):
     for i in range(generations):
         print(evaluate(population[0]))
@@ -85,8 +86,8 @@ for i in population[0]:
 solution[genome_length] = cities[population[0][0]]
 
 
-plt.plot(solution[:, 0], solution[:, 1], color='red', zorder=0)
-plt.scatter(cities[:, 0], cities[:, 1], marker='o')
+plt.plot(solution[:, 0], solution[:, 1], color='green', zorder=0)
+plt.scatter(cities[:, 0], cities[:, 1], color='red', marker='o')
 plt.axis('off')
 plt.show()
 
