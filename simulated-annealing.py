@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import random
 import math
 
+
 def evaluate(cities):
     distance = 0
     for index in range(len(cities)):
