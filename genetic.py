@@ -1,13 +1,14 @@
-import random
-import numpy as np
 import math
+import random
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def init_random_population():
     integers = np.arange(0, genome_length).astype(int)
-    population = np.empty((population_size, genome_length)).astype(int)
-    for i in range(population_size):
+    population = np.empty((matingPoolSize, genome_length)).astype(int)
+    for i in range(matingPoolSize):
         genome = integers.copy()
         random.shuffle(genome)
         population[i] = genome
@@ -28,23 +29,34 @@ def evaluate(route):
 
 
 def crossover():
-    a = random.randint(0, population_size - 1)
+    a = random.randint(0, matingPoolSize - 1)
     b = a
     while (a == b):
-        b = random.randint(0, population_size - 1)
+        b = random.randint(0, matingPoolSize - 1)
     aGenomeLength = math.floor(genome_length/2)
     firstPart = population[a][:aGenomeLength]
     secondPart = np.array([n for n in population[b] if n not in firstPart])
+    x1 = np.append(firstPart, secondPart)
 
-    return np.append(firstPart, secondPart)
+    firstPart = population[b][:aGenomeLength]
+    secondPart = np.array([n for n in population[b] if n not in firstPart])
+    x2 = np.append(firstPart, secondPart)
 
-def mutate():
-    i = random.randint(0, population_size - 1)
-    a = random.randint(0, genome_length - 1) #extract this to method
-    b = a
+    result = np.vstack(
+        [
+            mutate(x1),
+            mutate(mutate(x1)),
+
+            mutate(x2),
+            mutate(mutate(x2)),
+        ]
+    )
+    return result
+
+def mutate(genome):
+    a = b = random.randint(0, genome_length - 1) #extract this to method
     while (a == b):
         b = random.randint(0, genome_length - 1)
-    genome = population[i]
 
     tmp = genome[a]
     genome[a] = genome[b]
@@ -54,27 +66,39 @@ def mutate():
 
 
 def evolve(population):
-    for i in range(generations):
-        print(evaluate(population[0]))
-        population = np.vstack([population, [
-            crossover(),
-            crossover(),
-            mutate(),
-        ]])
-        population = np.array(sorted(population, key=lambda x: evaluate(x)))
-        population = population[:population_size]
+    last = evaluate(population[0])
+    counter = 0
+
+    while (True):
+        current = evaluate(population[0])
+        print(current)
+        if (last == current):
+            counter = counter + 1
+        else:
+            last = current
+            counter = 0
+
+        if (counter == stability_factor):
+            break
+
+        new_population = population[:elite]
+        for x in range(crossing_over_quantity):
+            new_population = np.vstack([new_population, crossover()])
+        new_population = np.array(sorted(new_population, key=lambda x: evaluate(x)))
+        population = new_population[:matingPoolSize]
 
 
     return population
 
 
-population_size = 10
-genome_length = 8
-generations = 25
+matingPoolSize = 50
+genome_length = 15
+stability_factor = 100
+elite = 5
+crossing_over_quantity = 50
 cities = (np.random.rand(genome_length, 2) * 100).astype(int)
 population = init_random_population()
 population = evolve(population)
-
 
 
 # print result
